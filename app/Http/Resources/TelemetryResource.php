@@ -16,7 +16,7 @@ class TelemetryResource extends JsonResource
     {
         return [
             'value' => $this->value,
-            'createdAt' => $this->created_at,
+            'updatedAt' => $this->created_at,
             'parameterName' => $this->sensorParameter->name,
             'parameterUnit' => $this->sensorParameter->unit,
             'parameterIcon' => $this->sensorParameter->icon,

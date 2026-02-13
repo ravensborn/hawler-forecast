@@ -4,10 +4,9 @@ namespace App\Jobs;
 
 use App\Models\SensorDevice;
 use App\Models\Telemetry;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
-class GenerateFakeTelemetry implements ShouldQueue
+class GenerateFakeTelemetry
 {
     use Queueable;
 
