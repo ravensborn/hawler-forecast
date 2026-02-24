@@ -84,3 +84,26 @@ it('includes non-expired and null-expiry pins', function () {
         ->assertSuccessful()
         ->assertJsonCount(2, 'data');
 });
+
+it('alert pins have multilingual messages in model data', function () {
+    $pin = MapPin::factory()->alert()->create();
+
+    expect($pin->data)->toHaveKeys(['severity', 'message'])
+        ->and($pin->data['message'])->toBeArray()
+        ->and($pin->data['message'])->toHaveKeys(['en', 'ar', 'ku'])
+        ->and($pin->data['message']['en'])->toBeString()
+        ->and($pin->data['message']['ar'])->toBeString()
+        ->and($pin->data['message']['ku'])->toBeString();
+});
+
+it('returns alert pin message in the requested language', function () {
+    MapPin::factory()->alert()->create([
+        'data' => ['severity' => 'high', 'message' => ['en' => 'High temperature', 'ar' => 'درجة حرارة عالية', 'ku' => 'گەرمای بەرز']],
+    ]);
+
+    $enPin = $this->getJson(route('map-pins.index', ['language' => 'en']))->json('data.0');
+    $arPin = $this->getJson(route('map-pins.index', ['language' => 'ar']))->json('data.0');
+
+    expect($enPin['data']['message'])->toBe('High temperature')
+        ->and($arPin['data']['message'])->toBe('درجة حرارة عالية');
+});

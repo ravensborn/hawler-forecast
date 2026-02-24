@@ -36,9 +36,39 @@ class MapPinSeeder extends Seeder
         }
 
         $alerts = [
-            ['name' => 'Erbil Bazaar', 'lat' => 36.1870, 'lng' => 44.0120, 'severity' => 'high', 'message' => 'Extreme heat warning'],
-            ['name' => 'Naz City', 'lat' => 36.2100, 'lng' => 44.0350, 'severity' => 'medium', 'message' => 'Strong winds advisory'],
-            ['name' => 'Shanadar', 'lat' => 36.1950, 'lng' => 44.0200, 'severity' => 'low', 'message' => 'Light dust forecast'],
+            [
+                'name' => 'Erbil Bazaar',
+                'lat' => 36.1870,
+                'lng' => 44.0120,
+                'severity' => 'high',
+                'message' => [
+                    'en' => 'Extreme heat warning',
+                    'ar' => 'تحذير من الحرارة الشديدة',
+                    'ku' => 'ئاگاداری گەرمای زۆر',
+                ],
+            ],
+            [
+                'name' => 'Naz City',
+                'lat' => 36.2100,
+                'lng' => 44.0350,
+                'severity' => 'medium',
+                'message' => [
+                    'en' => 'Strong winds advisory',
+                    'ar' => 'تنبيه من الرياح القوية',
+                    'ku' => 'ئاگاداری بای بەهێز',
+                ],
+            ],
+            [
+                'name' => 'Shanadar',
+                'lat' => 36.1950,
+                'lng' => 44.0200,
+                'severity' => 'low',
+                'message' => [
+                    'en' => 'Light dust forecast',
+                    'ar' => 'توقعات غبار خفيف',
+                    'ku' => 'پێشبینی تۆزی سووک',
+                ],
+            ],
         ];
 
         foreach ($alerts as $alert) {

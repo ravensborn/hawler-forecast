@@ -47,7 +47,11 @@ class MapPinFactory extends Factory
             'type' => MapPinType::Alert,
             'data' => [
                 'severity' => $this->faker->randomElement(['low', 'medium', 'high']),
-                'message' => $this->faker->sentence(),
+                'message' => [
+                    'en' => $this->faker->sentence(),
+                    'ar' => $this->faker->sentence(),
+                    'ku' => $this->faker->sentence(),
+                ],
             ],
             'expires_at' => now()->addDays($this->faker->numberBetween(1, 7)),
         ]);

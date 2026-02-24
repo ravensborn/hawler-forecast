@@ -15,7 +15,7 @@ class SensorDeviceResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'name' => $this->getTranslations('name'),
+            'name' => $this->name,
             'latestTelemetry' => TelemetryResource::collection($this->whenLoaded('latestTelemetries')),
         ];
     }

@@ -33,7 +33,7 @@ it('returns alerts ordered by newest first', function () {
         ->and($ids->last())->toBe($old->id);
 });
 
-it('returns the correct json structure with translations', function () {
+it('returns the correct json structure', function () {
     Alert::factory()->create();
 
     $this->getJson(route('alerts.index'))
@@ -43,11 +43,10 @@ it('returns the correct json structure with translations', function () {
                 '*' => [
                     'id',
                     'icon',
-                    'title' => ['en', 'ar', 'ku'],
-                    'description' => ['en', 'ar', 'ku'],
+                    'title',
+                    'description',
                     'type',
-                    'created_at',
-                    'updated_at',
+                    'createdAt',
                 ],
             ],
         ]);
@@ -71,21 +70,46 @@ it('does not require authentication', function () {
         ->assertSuccessful();
 });
 
-it('returns all translations for translatable fields', function () {
+it('returns translation in the requested language', function () {
     Alert::factory()->create([
         'title' => ['en' => 'English Title', 'ar' => 'عنوان عربي', 'ku' => 'ناونیشانی کوردی'],
         'description' => ['en' => 'English description', 'ar' => 'وصف عربي', 'ku' => 'وەسفی کوردی'],
     ]);
 
-    $response = $this->getJson(route('alerts.index'))
+    $response = $this->getJson(route('alerts.index', ['language' => 'ar']))
         ->assertSuccessful();
 
     $alert = $response->json('data.0');
 
-    expect($alert['title']['en'])->toBe('English Title')
-        ->and($alert['title']['ar'])->toBe('عنوان عربي')
-        ->and($alert['title']['ku'])->toBe('ناونیشانی کوردی')
-        ->and($alert['description']['en'])->toBe('English description')
-        ->and($alert['description']['ar'])->toBe('وصف عربي')
-        ->and($alert['description']['ku'])->toBe('وەسفی کوردی');
+    expect($alert['title'])->toBe('عنوان عربي')
+        ->and($alert['description'])->toBe('وصف عربي');
+});
+
+it('defaults to english when no language parameter is provided', function () {
+    Alert::factory()->create([
+        'title' => ['en' => 'English Title', 'ar' => 'عنوان عربي', 'ku' => 'ناونیشانی کوردی'],
+        'description' => ['en' => 'English description', 'ar' => 'وصف عربي', 'ku' => 'وەسفی کوردی'],
+    ]);
+
+    $alert = $this->getJson(route('alerts.index'))
+        ->assertSuccessful()
+        ->json('data.0');
+
+    expect($alert['title'])->toBe('English Title')
+        ->and($alert['description'])->toBe('English description');
+});
+
+it('returns translations for all supported languages', function () {
+    Alert::factory()->create([
+        'title' => ['en' => 'English Title', 'ar' => 'عنوان عربي', 'ku' => 'ناونیشانی کوردی'],
+        'description' => ['en' => 'English description', 'ar' => 'وصف عربي', 'ku' => 'وەسفی کوردی'],
+    ]);
+
+    $enAlert = $this->getJson(route('alerts.index', ['language' => 'en']))->json('data.0');
+    $arAlert = $this->getJson(route('alerts.index', ['language' => 'ar']))->json('data.0');
+    $kuAlert = $this->getJson(route('alerts.index', ['language' => 'ku']))->json('data.0');
+
+    expect($enAlert['title'])->toBe('English Title')
+        ->and($arAlert['title'])->toBe('عنوان عربي')
+        ->and($kuAlert['title'])->toBe('ناونیشانی کوردی');
 });

@@ -33,6 +33,11 @@ class MapPinResource extends JsonResource
     {
         $data = $this->data;
 
+        if ($data !== null && isset($data['message']) && is_array($data['message'])) {
+            $locale = app()->getLocale();
+            $data['message'] = $data['message'][$locale] ?? $data['message'][config('app.fallback_locale')] ?? null;
+        }
+
         if ($this->type === MapPinType::WeatherStation && $this->relationLoaded('sensorDeviceGroup') && $this->sensorDeviceGroup) {
             $data['sensorDeviceGroup'] = (new SensorDeviceGroupResource($this->sensorDeviceGroup))->resolve();
         }
