@@ -42,9 +42,8 @@ class SensorDevice extends Model
         return $this->hasMany(Telemetry::class)
             ->whereIn('id', function ($query) {
                 $query->selectRaw('MAX(id)')
-                    ->from('telemetries as latest')
-                    ->whereColumn('latest.sensor_device_id', 'telemetries.sensor_device_id')
-                    ->groupBy('latest.sensor_parameter_id');
+                    ->from('telemetries')
+                    ->groupBy('sensor_device_id', 'sensor_parameter_id');
             });
     }
 }
