@@ -19,7 +19,7 @@
         "spatie/laravel-translatable": "^6.12"
     },
     "require-dev": {
-        "laravel/boost": "*",
+        "laravel/boost": "^2.1",
         "laravel/pail": "^1.2.2",
         "laravel/pint": "^1.24",
         "laravel/sail": "^1.41",
