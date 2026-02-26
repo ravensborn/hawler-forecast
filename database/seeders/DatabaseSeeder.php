@@ -26,6 +26,8 @@ class DatabaseSeeder extends Seeder
             AlertSeeder::class,
             SensorSeeder::class,
             MapPinSeeder::class,
+            IncidentTypeSeeder::class,
+            IncidentSeeder::class,
         ]);
     }
 }

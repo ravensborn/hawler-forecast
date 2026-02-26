@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\IncidentController;
+use App\Http\Controllers\Api\IncidentTypeController;
 use App\Http\Controllers\Api\MapPinController;
 use App\Http\Controllers\Api\AlertController;
 use App\Http\Controllers\Api\SensorDeviceGroupController;
@@ -16,3 +18,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('alerts', [AlertController::class, 'index'])->name('alerts.index');
 Route::get('map-pins', [MapPinController::class, 'index'])->name('map-pins.index');
 Route::get('sensor-device-groups', [SensorDeviceGroupController::class, 'index'])->name('sensor-device-groups.index');
+Route::post('incidents', [IncidentController::class, 'store'])->name('incidents.store');
+Route::get('incident-types', [IncidentTypeController::class, 'index'])->name('incident-types.index');
