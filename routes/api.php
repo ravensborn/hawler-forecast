@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\MapPinController;
 use App\Http\Controllers\Api\AlertController;
 use App\Http\Controllers\Api\SensorDeviceGroupController;
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\Dashboard\IncidentController as DashboardIncidentController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -16,6 +17,10 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
         // Route::post('forgot-password', [AuthController::class, 'forgotPassword'])->name('forgot-password');
         // Route::post('verify-reset-code', [AuthController::class, 'verifyResetCode'])->name('verify-reset-code');
         // Route::post('reset-password-with-token', [AuthController::class, 'resetPasswordWithToken'])->name('reset-password-with-token');
+    });
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('incidents', [DashboardIncidentController::class, 'index'])->name('incidents.index');
     });
 
 });

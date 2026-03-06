@@ -12,7 +12,7 @@ class IncidentTypeSeeder extends Seeder
      */
     public function run(): void
     {
-        $types = ['car-crash', 'fire', 'flood', 'gas-leak', 'power-outage', 'road-block', 'other'];
+        $types = ['Car Crash', 'Fire', 'Flood', 'Gas Leak', 'Power Outage', 'Road Block', 'Other'];
 
         foreach ($types as $type) {
             IncidentType::query()->firstOrCreate(['name' => $type]);
