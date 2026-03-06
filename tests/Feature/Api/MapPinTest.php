@@ -96,6 +96,40 @@ it('alert pins have multilingual messages in model data', function () {
         ->and($pin->data['message']['ku'])->toBeString();
 });
 
+it('returns valid map pin type values including incident', function () {
+    MapPin::factory()->weatherStation()->create();
+    MapPin::factory()->alert()->create();
+    MapPin::factory()->incident()->create();
+
+    $response = $this->getJson(route('map-pins.index'))
+        ->assertSuccessful();
+
+    $types = collect($response->json('data'))->pluck('type')->unique()->values();
+
+    expect($types->toArray())->each->toBeIn(MapPinType::values());
+});
+
+it('incident pins have only message in model data', function () {
+    $pin = MapPin::factory()->incident()->create();
+
+    expect($pin->data)->toHaveKey('message')
+        ->and($pin->data)->not->toHaveKey('severity')
+        ->and($pin->data['message'])->toBeArray()
+        ->and($pin->data['message'])->toHaveKeys(['en', 'ar', 'ku']);
+});
+
+it('returns incident pin message in the requested language', function () {
+    MapPin::factory()->incident()->create([
+        'data' => ['message' => ['en' => 'Road closure', 'ar' => 'إغلاق الطريق', 'ku' => 'داخستنی ڕێگا']],
+    ]);
+
+    $enPin = $this->getJson(route('map-pins.index', ['language' => 'en']))->json('data.0');
+    $arPin = $this->getJson(route('map-pins.index', ['language' => 'ar']))->json('data.0');
+
+    expect($enPin['data']['message'])->toBe('Road closure')
+        ->and($arPin['data']['message'])->toBe('إغلاق الطريق');
+});
+
 it('returns alert pin message in the requested language', function () {
     MapPin::factory()->alert()->create([
         'data' => ['severity' => 'high', 'message' => ['en' => 'High temperature', 'ar' => 'درجة حرارة عالية', 'ku' => 'گەرمای بەرز']],

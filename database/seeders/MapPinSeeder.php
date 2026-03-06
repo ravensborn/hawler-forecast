@@ -82,5 +82,37 @@ class MapPinSeeder extends Seeder
                 'expires_at' => now()->addDays(rand(1, 7)),
             ]);
         }
+
+        $incidents = [
+            [
+                'lat' => 36.2050,
+                'lng' => 44.0080,
+                'message' => [
+                    'en' => 'Road closure due to construction',
+                    'ar' => 'إغلاق الطريق بسبب أعمال البناء',
+                    'ku' => 'داخستنی ڕێگا بەهۆی بیناسازییەوە',
+                ],
+            ],
+            [
+                'lat' => 36.1920,
+                'lng' => 44.0300,
+                'message' => [
+                    'en' => 'Water main break reported',
+                    'ar' => 'تم الإبلاغ عن كسر في أنبوب المياه الرئيسي',
+                    'ku' => 'شکانی بۆری سەرەکی ئاو',
+                ],
+            ],
+        ];
+
+        foreach ($incidents as $incident) {
+            MapPin::factory()->incident()->create([
+                'latitude' => $incident['lat'],
+                'longitude' => $incident['lng'],
+                'data' => [
+                    'message' => $incident['message'],
+                ],
+                'expires_at' => now()->addDays(rand(1, 7)),
+            ]);
+        }
     }
 }

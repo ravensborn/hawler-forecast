@@ -57,6 +57,22 @@ class MapPinFactory extends Factory
         ]);
     }
 
+    public function incident(): static
+    {
+        return $this->state(fn () => [
+            'icon' => 'incident',
+            'type' => MapPinType::Incident,
+            'data' => [
+                'message' => [
+                    'en' => $this->faker->sentence(),
+                    'ar' => $this->faker->sentence(),
+                    'ku' => $this->faker->sentence(),
+                ],
+            ],
+            'expires_at' => now()->addDays($this->faker->numberBetween(1, 7)),
+        ]);
+    }
+
     public function expired(): static
     {
         return $this->state(fn () => [

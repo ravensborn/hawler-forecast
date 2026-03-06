@@ -6,6 +6,7 @@ enum MapPinType: string
 {
     case WeatherStation = 'weather-station';
     case Alert = 'alert';
+    case Incident = 'incident';
 
     public static function values(): array
     {
