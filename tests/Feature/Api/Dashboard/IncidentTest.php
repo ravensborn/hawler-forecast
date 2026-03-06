@@ -18,7 +18,19 @@ it('returns a paginated list of incidents', function () {
         ->getJson(route('dashboard.incidents.index'))
         ->assertSuccessful()
         ->assertJsonCount(5, 'data')
-        ->assertJsonStructure(['data', 'links', 'meta']);
+        ->assertJsonStructure(['data', 'meta']);
+});
+
+it('paginates 10 incidents per page', function () {
+    Incident::factory(15)->create();
+
+    $response = $this->actingAs(User::factory()->create())
+        ->getJson(route('dashboard.incidents.index'))
+        ->assertSuccessful()
+        ->assertJsonCount(10, 'data');
+
+    expect($response->json('meta.perPage'))->toBe(10)
+        ->and($response->json('meta.total'))->toBe(15);
 });
 
 it('returns an empty list when no incidents exist', function () {

@@ -2,13 +2,13 @@
 
 namespace App\Http\Actions\Dashboard;
 
-use App\Models\Incident;
+use App\Models\Alert;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class ListIncidentsAction
+class ListAlertsAction
 {
     public function execute(): LengthAwarePaginator
     {
-        return Incident::query()->with('incidentType')->latest()->paginate(10);
+        return Alert::query()->latest()->paginate(10);
     }
 }
