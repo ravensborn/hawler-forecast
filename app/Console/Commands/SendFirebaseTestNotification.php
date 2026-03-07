@@ -26,7 +26,9 @@ class SendFirebaseTestNotification extends Command
 
             $this->info('Notification sent successfully.');
             $this->line('Response: ' . json_encode($result));
+
         } catch (\Throwable $e) {
+
             $this->error("Failed to send notification: {$e->getMessage()}");
         }
     }

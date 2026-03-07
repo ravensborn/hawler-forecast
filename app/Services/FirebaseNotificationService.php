@@ -3,18 +3,25 @@
 namespace App\Services;
 
 use Kreait\Firebase\Contract\Messaging;
+use Kreait\Firebase\Exception\FirebaseException;
+use Kreait\Firebase\Exception\MessagingException;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification;
 
-class FirebaseNotificationService
+readonly class FirebaseNotificationService
 {
     public function __construct(private Messaging $messaging) {}
 
     /**
      * Send a notification to a Firebase topic.
      *
-     * @param  array<string, string>  $data
+     * @param string $topic
+     * @param string $title
+     * @param string $body
+     * @param array<string, string> $data
      * @return array<string, mixed>
+     * @throws FirebaseException
+     * @throws MessagingException
      */
     public function sendToTopic(string $topic, string $title, string $body, array $data = []): array
     {
