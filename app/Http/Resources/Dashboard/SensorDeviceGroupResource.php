@@ -13,7 +13,7 @@ class SensorDeviceGroupResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'name' => $this->name,
+            'name' => $this->getTranslations('name'),
             'sensorDevices' => SensorDeviceResource::collection($this->whenLoaded('sensorDevices')),
         ];
     }

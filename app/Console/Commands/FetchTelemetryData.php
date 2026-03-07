@@ -17,6 +17,7 @@ class FetchTelemetryData extends Command
     {
         $parameters = SensorParameter::query()
             ->with('sensorDevice')
+            ->where('platform_parameter_id', '!=', 0)
             ->get()
             ->keyBy('platform_parameter_id');
 

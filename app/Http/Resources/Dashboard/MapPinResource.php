@@ -29,7 +29,7 @@ class MapPinResource extends JsonResource
      */
     private function resolveData(): ?array
     {
-        $data = $this->data;
+        $data = $this->data ?? [];
 
         if ($this->type === MapPinType::WeatherStation && $this->relationLoaded('sensorDeviceGroup') && $this->sensorDeviceGroup) {
             $data['sensorDeviceGroup'] = (new SensorDeviceGroupResource($this->sensorDeviceGroup))->resolve();

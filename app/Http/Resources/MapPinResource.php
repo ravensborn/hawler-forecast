@@ -31,9 +31,9 @@ class MapPinResource extends JsonResource
      */
     private function resolveData(): ?array
     {
-        $data = $this->data;
+        $data = $this->data ?? [];
 
-        if ($data !== null && isset($data['message']) && is_array($data['message'])) {
+        if (isset($data['message']) && is_array($data['message'])) {
             $locale = app()->getLocale();
             $data['message'] = $data['message'][$locale] ?? $data['message'][config('app.fallback_locale')] ?? null;
         }
@@ -42,6 +42,6 @@ class MapPinResource extends JsonResource
             $data['sensorDeviceGroup'] = (new SensorDeviceGroupResource($this->sensorDeviceGroup))->resolve();
         }
 
-        return $data;
+        return empty($data) ? null : $data;
     }
 }
