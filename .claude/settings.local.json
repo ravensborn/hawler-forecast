@@ -26,7 +26,8 @@
       "mcp__laravel-boost__list-routes",
       "Bash(php artisan tinker:*)",
       "Bash(php artisan make:middleware:*)",
-      "Bash(php artisan:*)"
+      "Bash(php artisan:*)",
+      "Bash(composer require:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

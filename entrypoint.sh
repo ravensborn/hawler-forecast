@@ -9,6 +9,7 @@ role=${CONTAINER_ROLE:-app}
 
 if [ "$role" = "app" ]; then
     php artisan migrate:fresh --seed
+    php artisan firebase:create-credentials
     php artisan optimize:clear
 
     php-fpm -D
