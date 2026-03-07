@@ -23,11 +23,11 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
-            AlertSeeder::class,
-            SensorSeeder::class,
-            MapPinSeeder::class,
+//            AlertSeeder::class,
+            TeknykarSensorSeeder::class,
+//            MapPinSeeder::class,
             IncidentTypeSeeder::class,
-            IncidentSeeder::class,
+//            IncidentSeeder::class,
         ]);
     }
 }
