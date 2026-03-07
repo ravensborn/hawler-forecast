@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\MapPinType;
+use App\Enums\Severity;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -46,7 +47,7 @@ class MapPinFactory extends Factory
             'icon' => 'alert-triangle',
             'type' => MapPinType::Alert,
             'data' => [
-                'severity' => $this->faker->randomElement(['low', 'medium', 'high']),
+                'severity' => $this->faker->randomElement(Severity::cases()),
                 'message' => [
                     'en' => $this->faker->sentence(),
                     'ar' => $this->faker->sentence(),

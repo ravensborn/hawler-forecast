@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\Severity;
 use App\Models\MapPin;
 use App\Models\SensorDeviceGroup;
 use Illuminate\Database\Seeder;
@@ -40,7 +41,7 @@ class MapPinSeeder extends Seeder
                 'name' => 'Erbil Bazaar',
                 'lat' => 36.1870,
                 'lng' => 44.0120,
-                'severity' => 'high',
+                'severity' => Severity::High,
                 'message' => [
                     'en' => 'Extreme heat warning',
                     'ar' => 'تحذير من الحرارة الشديدة',
@@ -51,7 +52,7 @@ class MapPinSeeder extends Seeder
                 'name' => 'Naz City',
                 'lat' => 36.2100,
                 'lng' => 44.0350,
-                'severity' => 'medium',
+                'severity' => Severity::Medium,
                 'message' => [
                     'en' => 'Strong winds advisory',
                     'ar' => 'تنبيه من الرياح القوية',
@@ -62,7 +63,7 @@ class MapPinSeeder extends Seeder
                 'name' => 'Shanadar',
                 'lat' => 36.1950,
                 'lng' => 44.0200,
-                'severity' => 'low',
+                'severity' => Severity::Low,
                 'message' => [
                     'en' => 'Light dust forecast',
                     'ar' => 'توقعات غبار خفيف',
