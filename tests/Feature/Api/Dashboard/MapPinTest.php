@@ -175,3 +175,85 @@ it('requires all fields', function () {
         ->assertUnprocessable()
         ->assertJsonValidationErrors(['icon', 'latitude', 'longitude', 'type', 'severity', 'data']);
 });
+
+it('updates an alert map pin', function () {
+    $pin = MapPin::factory()->alert()->create();
+
+    $this->actingAs(User::factory()->create())
+        ->putJson(route('dashboard.map-pins.update', $pin), [
+            'icon' => 'updated-icon',
+            'severity' => 'low',
+            'data' => [
+                'message' => [
+                    'en' => 'Updated message',
+                    'ar' => 'رسالة محدثة',
+                    'ku' => 'نامەی نوێکراوە',
+                ],
+            ],
+        ])
+        ->assertSuccessful()
+        ->assertJsonPath('icon', 'updated-icon')
+        ->assertJsonPath('data.severity', 'low')
+        ->assertJsonPath('data.message.en', 'Updated message');
+});
+
+it('updates an incident map pin', function () {
+    $pin = MapPin::factory()->incident()->create();
+
+    $this->actingAs(User::factory()->create())
+        ->putJson(route('dashboard.map-pins.update', $pin), [
+            'severity' => 'high',
+        ])
+        ->assertSuccessful()
+        ->assertJsonPath('data.severity', 'high');
+});
+
+it('cannot update a weather station pin', function () {
+    $pin = MapPin::factory()->weatherStation()->create();
+
+    $this->actingAs(User::factory()->create())
+        ->putJson(route('dashboard.map-pins.update', $pin), [
+            'icon' => 'new-icon',
+        ])
+        ->assertForbidden();
+});
+
+it('deletes an alert map pin', function () {
+    $pin = MapPin::factory()->alert()->create();
+
+    $this->actingAs(User::factory()->create())
+        ->deleteJson(route('dashboard.map-pins.destroy', $pin))
+        ->assertNoContent();
+
+    expect(MapPin::count())->toBe(0);
+});
+
+it('deletes an incident map pin', function () {
+    $pin = MapPin::factory()->incident()->create();
+
+    $this->actingAs(User::factory()->create())
+        ->deleteJson(route('dashboard.map-pins.destroy', $pin))
+        ->assertNoContent();
+
+    expect(MapPin::count())->toBe(0);
+});
+
+it('cannot delete a weather station pin', function () {
+    $pin = MapPin::factory()->weatherStation()->create();
+
+    $this->actingAs(User::factory()->create())
+        ->deleteJson(route('dashboard.map-pins.destroy', $pin))
+        ->assertForbidden();
+
+    expect(MapPin::count())->toBe(1);
+});
+
+it('requires authentication for update and delete', function () {
+    $pin = MapPin::factory()->alert()->create();
+
+    $this->putJson(route('dashboard.map-pins.update', $pin))
+        ->assertUnauthorized();
+
+    $this->deleteJson(route('dashboard.map-pins.destroy', $pin))
+        ->assertUnauthorized();
+});

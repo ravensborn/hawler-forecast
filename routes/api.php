@@ -28,6 +28,8 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
         Route::post('alerts', [DashboardAlertController::class, 'store'])->name('alerts.store');
         Route::get('map-pins', [DashboardMapPinController::class, 'index'])->name('map-pins.index');
         Route::post('map-pins', [DashboardMapPinController::class, 'store'])->name('map-pins.store');
+        Route::put('map-pins/{mapPin}', [DashboardMapPinController::class, 'update'])->name('map-pins.update');
+        Route::delete('map-pins/{mapPin}', [DashboardMapPinController::class, 'destroy'])->name('map-pins.destroy');
         Route::get('sensor-device-groups', [DashboardSensorDeviceGroupController::class, 'index'])->name('sensor-device-groups.index');
     });
 
