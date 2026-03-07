@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Dashboard\AlertController as DashboardAlertController;
 use App\Http\Controllers\Api\Dashboard\IncidentController as DashboardIncidentController;
 use App\Http\Controllers\Api\Dashboard\MapPinController as DashboardMapPinController;
+use App\Http\Controllers\Api\Dashboard\SensorDeviceGroupController as DashboardSensorDeviceGroupController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -26,6 +27,7 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
         Route::get('alerts', [DashboardAlertController::class, 'index'])->name('alerts.index');
         Route::post('alerts', [DashboardAlertController::class, 'store'])->name('alerts.store');
         Route::get('map-pins', [DashboardMapPinController::class, 'index'])->name('map-pins.index');
+        Route::get('sensor-device-groups', [DashboardSensorDeviceGroupController::class, 'index'])->name('sensor-device-groups.index');
     });
 
 });
