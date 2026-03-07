@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Alert;
+use App\Models\AlertRule;
 use App\Models\SensorParameter;
 use App\Models\Telemetry;
 use App\Services\TeknykarIotService;
@@ -16,7 +18,7 @@ class FetchTelemetryData extends Command
     public function handle(TeknykarIotService $service): void
     {
         $parameters = SensorParameter::query()
-            ->with('sensorDevice')
+            ->with(['sensorDevice', 'alertRules'])
             ->where('platform_parameter_id', '!=', 0)
             ->get()
             ->keyBy('platform_parameter_id');
@@ -57,16 +59,53 @@ class FetchTelemetryData extends Command
                     }
 
                     Telemetry::create([
-                        'sensor_device_id'    => $device->id,
+                        'sensor_device_id' => $device->id,
                         'sensor_parameter_id' => $parameter->id,
-                        'value'               => $reading['Value'],
+                        'value' => $reading['Value'],
                     ]);
 
                     $this->line("  ✓ {$parameter->name} = {$reading['Value']} (device: {$device->id})");
                     $stored++;
+
+                    $this->evaluateAlertRules($parameter, (float) $reading['Value']);
                 }
             });
 
         $this->info("Done. Stored {$stored} telemetry readings.");
+    }
+
+    private function evaluateAlertRules(SensorParameter $parameter, float $value): void
+    {
+        foreach ($parameter->alertRules as $rule) {
+            if (! $rule->evaluate($value)) {
+                continue;
+            }
+
+            if ($rule->isOnCooldown()) {
+                $this->line("    ⏸ Rule '{$rule->name}' on cooldown, skipping");
+
+                continue;
+            }
+
+            $this->triggerAlert($rule);
+        }
+    }
+
+    private function triggerAlert(AlertRule $rule): void
+    {
+        Alert::create([
+            'icon' => $rule->alert_icon,
+            'title' => $rule->getTranslations('alert_title'),
+            'description' => $rule->getTranslations('alert_description'),
+            'type' => $rule->alert_type,
+            'alert_rule_id' => $rule->id,
+        ]);
+
+        $this->line("    ⚠ Alert triggered: {$rule->name}");
+
+        if ($rule->should_notify) {
+            $this->line("    📨 Notification queued for rule: {$rule->name}");
+            // TODO: Dispatch push notification job when notification service is set up
+        }
     }
 }
