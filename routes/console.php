@@ -8,4 +8,4 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Schedule::command('telemetry:fetch')->everyMinute();
+Schedule::command('telemetry:fetch')->everyTenMinutes();
