@@ -15,21 +15,20 @@ class SensorDevice extends Model
 
     protected $fillable = [
         'name',
-        'sensor_id',
         'sensor_device_group_id',
         'platform_device_id',
     ];
 
     public array $translatable = ['name'];
 
-    public function sensor(): BelongsTo
-    {
-        return $this->belongsTo(Sensor::class);
-    }
-
     public function sensorDeviceGroup(): BelongsTo
     {
         return $this->belongsTo(SensorDeviceGroup::class);
+    }
+
+    public function sensorParameters(): HasMany
+    {
+        return $this->hasMany(SensorParameter::class);
     }
 
     public function telemetries(): HasMany

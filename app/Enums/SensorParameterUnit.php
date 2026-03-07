@@ -10,6 +10,7 @@ enum SensorParameterUnit: string
     case PartsPerMillion = 'ppm';
     case PartsPerBillion = 'ppb';
     case MicrogramsPerCubicMeter = 'µg/m³';
+    case MilligramsPerCubicMeter = 'mg/m³';
     case Millimeters = 'mm';
 
     public static function values(): array

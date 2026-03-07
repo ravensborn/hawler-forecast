@@ -9,6 +9,6 @@ class ListAlertsAction
 {
     public function execute(): LengthAwarePaginator
     {
-        return Alert::query()->latest()->paginate(5);
+        return Alert::query()->latest()->paginate(10);
     }
 }

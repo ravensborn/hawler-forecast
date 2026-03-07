@@ -9,6 +9,6 @@ class ListIncidentsAction
 {
     public function execute(): LengthAwarePaginator
     {
-        return Incident::query()->with('incidentType')->latest()->paginate(5);
+        return Incident::query()->with('incidentType')->latest()->paginate(10);
     }
 }

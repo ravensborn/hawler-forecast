@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Sensor;
 use App\Models\SensorDevice;
 use App\Models\SensorDeviceGroup;
 use App\Models\SensorParameter;
@@ -17,18 +16,13 @@ it('returns an empty list when no sensor device groups exist', function () {
 
 it('returns a list of sensor device groups with devices and telemetry', function () {
     $group = SensorDeviceGroup::factory()->create();
-    $sensor = Sensor::factory()->create();
-    $parameter = SensorParameter::factory()->create(['sensor_id' => $sensor->id]);
-
-    $device = SensorDevice::factory()->create([
-        'sensor_id' => $sensor->id,
-        'sensor_device_group_id' => $group->id,
-    ]);
+    $device = SensorDevice::factory()->create(['sensor_device_group_id' => $group->id]);
+    $parameter = SensorParameter::factory()->create(['sensor_device_id' => $device->id]);
 
     Telemetry::factory()->create([
-        'sensor_device_id' => $device->id,
+        'sensor_device_id'    => $device->id,
         'sensor_parameter_id' => $parameter->id,
-        'value' => 25.5,
+        'value'               => 25.5,
     ]);
 
     $this->getJson(route('sensor-device-groups.index'))
@@ -40,16 +34,11 @@ it('returns a list of sensor device groups with devices and telemetry', function
 
 it('returns the correct json structure', function () {
     $group = SensorDeviceGroup::factory()->create();
-    $sensor = Sensor::factory()->create();
-    $parameter = SensorParameter::factory()->create(['sensor_id' => $sensor->id]);
-
-    $device = SensorDevice::factory()->create([
-        'sensor_id' => $sensor->id,
-        'sensor_device_group_id' => $group->id,
-    ]);
+    $device = SensorDevice::factory()->create(['sensor_device_group_id' => $group->id]);
+    $parameter = SensorParameter::factory()->create(['sensor_device_id' => $device->id]);
 
     Telemetry::factory()->create([
-        'sensor_device_id' => $device->id,
+        'sensor_device_id'    => $device->id,
         'sensor_parameter_id' => $parameter->id,
     ]);
 
@@ -80,26 +69,21 @@ it('returns the correct json structure', function () {
 
 it('returns only the latest telemetry per parameter', function () {
     $group = SensorDeviceGroup::factory()->create();
-    $sensor = Sensor::factory()->create();
-    $parameter = SensorParameter::factory()->create(['sensor_id' => $sensor->id]);
-
-    $device = SensorDevice::factory()->create([
-        'sensor_id' => $sensor->id,
-        'sensor_device_group_id' => $group->id,
-    ]);
+    $device = SensorDevice::factory()->create(['sensor_device_group_id' => $group->id]);
+    $parameter = SensorParameter::factory()->create(['sensor_device_id' => $device->id]);
 
     Telemetry::factory()->create([
-        'sensor_device_id' => $device->id,
+        'sensor_device_id'    => $device->id,
         'sensor_parameter_id' => $parameter->id,
-        'value' => 10.0,
-        'created_at' => now()->subHour(),
+        'value'               => 10.0,
+        'created_at'          => now()->subHour(),
     ]);
 
     $latest = Telemetry::factory()->create([
-        'sensor_device_id' => $device->id,
+        'sensor_device_id'    => $device->id,
         'sensor_parameter_id' => $parameter->id,
-        'value' => 25.5,
-        'created_at' => now(),
+        'value'               => 25.5,
+        'created_at'          => now(),
     ]);
 
     $response = $this->getJson(route('sensor-device-groups.index'))

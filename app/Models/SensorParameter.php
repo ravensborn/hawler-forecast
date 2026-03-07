@@ -13,15 +13,15 @@ class SensorParameter extends Model
 
     protected $fillable = [
         'name',
-        'sensor_id',
+        'sensor_device_id',
         'platform_parameter_id',
         'unit',
         'icon',
     ];
 
-    public function sensor(): BelongsTo
+    public function sensorDevice(): BelongsTo
     {
-        return $this->belongsTo(Sensor::class);
+        return $this->belongsTo(SensorDevice::class);
     }
 
     public function telemetries(): HasMany

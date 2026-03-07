@@ -16,7 +16,7 @@ class FetchTelemetryData extends Command
     public function handle(TeknykarIotService $service): void
     {
         $parameters = SensorParameter::query()
-            ->with('sensor.sensorDevices')
+            ->with('sensorDevice')
             ->get()
             ->keyBy('platform_parameter_id');
 
@@ -47,7 +47,7 @@ class FetchTelemetryData extends Command
                         continue;
                     }
 
-                    $device = $parameter->sensor->sensorDevices->first();
+                    $device = $parameter->sensorDevice;
 
                     if (! $device) {
                         $this->warn("  No device for parameter {$parameter->name}");
@@ -56,9 +56,9 @@ class FetchTelemetryData extends Command
                     }
 
                     Telemetry::create([
-                        'sensor_device_id' => $device->id,
+                        'sensor_device_id'    => $device->id,
                         'sensor_parameter_id' => $parameter->id,
-                        'value' => $reading['Value'],
+                        'value'               => $reading['Value'],
                     ]);
 
                     $this->line("  ✓ {$parameter->name} = {$reading['Value']} (device: {$device->id})");
