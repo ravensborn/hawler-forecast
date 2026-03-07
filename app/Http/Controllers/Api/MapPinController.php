@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\MapPinResource;
 use App\Models\MapPin;
+use Dedoc\Scramble\Attributes\Group;
 use Dedoc\Scramble\Attributes\QueryParameter;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
+#[Group('App')]
 class MapPinController extends Controller
 {
     #[QueryParameter('language', description: 'The language code for translatable fields.', type: 'string', example: 'en')]
