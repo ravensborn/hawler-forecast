@@ -1,9 +1,11 @@
 <?php
 
 use App\Enums\MapPinType;
+use App\Jobs\SendFirebasePushNotification;
 use App\Models\MapPin;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Queue;
 
 uses(RefreshDatabase::class);
 
@@ -91,6 +93,8 @@ it('returns all language translations in message data', function () {
 });
 
 it('creates a map pin with alert type', function () {
+    Queue::fake();
+
     $this->actingAs(User::factory()->create())
         ->postJson(route('dashboard.map-pins.store'), [
             'icon' => 'warning',
@@ -116,6 +120,8 @@ it('creates a map pin with alert type', function () {
 });
 
 it('creates a map pin with incident type', function () {
+    Queue::fake();
+
     $this->actingAs(User::factory()->create())
         ->postJson(route('dashboard.map-pins.store'), [
             'icon' => 'fire',
@@ -246,6 +252,35 @@ it('cannot delete a weather station pin', function () {
         ->assertForbidden();
 
     expect(MapPin::count())->toBe(1);
+});
+
+it('dispatches push notification when creating a map pin', function () {
+    Queue::fake();
+
+    $this->actingAs(User::factory()->create())
+        ->postJson(route('dashboard.map-pins.store'), [
+            'icon' => 'warning',
+            'latitude' => 36.1994,
+            'longitude' => 44.0220,
+            'type' => 'alert',
+            'severity' => 'high',
+            'data' => [
+                'message' => [
+                    'en' => 'Flood warning',
+                    'ar' => 'تحذير من فيضان',
+                    'ku' => 'ئاگاداری لافاو',
+                ],
+            ],
+            'expires_at' => now()->addDays(3)->toISOString(),
+        ])
+        ->assertSuccessful();
+
+    Queue::assertPushed(SendFirebasePushNotification::class, function ($job) {
+        return $job->bodies['en'] === 'Flood warning'
+            && $job->bodies['ar'] === 'تحذير من فيضان'
+            && $job->bodies['ku'] === 'ئاگاداری لافاو'
+            && $job->data['type'] === 'alert';
+    });
 });
 
 it('requires authentication for update and delete', function () {

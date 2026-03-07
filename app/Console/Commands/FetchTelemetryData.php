@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\SendFirebasePushNotification;
 use App\Models\Alert;
 use App\Models\AlertRule;
 use App\Models\SensorParameter;
@@ -104,8 +105,15 @@ class FetchTelemetryData extends Command
         $this->line("    ⚠ Alert triggered: {$rule->name}");
 
         if ($rule->should_notify) {
+            SendFirebasePushNotification::dispatch(
+                titles: $rule->getTranslations('alert_title'),
+                bodies: $rule->getTranslations('alert_description'),
+                data: [
+                    'type' => 'alert_rule',
+                    'alert_rule_id' => (string) $rule->id,
+                ],
+            );
             $this->line("    📨 Notification queued for rule: {$rule->name}");
-            // TODO: Dispatch push notification job when notification service is set up
         }
     }
 }

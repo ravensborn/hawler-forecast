@@ -22,25 +22,25 @@ services:
     labels:
       - traefik.enable=true
 
-#  horizon:
-#    container_name: hawler-forecast-backend-horizon-${APP_ENV}
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#      target: php
-#    env_file:
-#      - .env
-#    environment:
-#      - CONTAINER_ROLE=horizon
-#    working_dir: /var/www
-#    volumes:
-#      - storage-data:/var/www/storage/app
-#      - logs-data:/var/www/storage/logs
-#    depends_on:
-#      - app
-#    networks:
-#      - dokploy-network
-#    restart: unless-stopped
+  horizon:
+    container_name: hawler-forecast-backend-horizon-${APP_ENV}
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: php
+    env_file:
+      - .env
+    environment:
+      - CONTAINER_ROLE=horizon
+    working_dir: /var/www
+    volumes:
+      - storage-data:/var/www/storage/app
+      - logs-data:/var/www/storage/logs
+    depends_on:
+      - app
+    networks:
+      - dokploy-network
+    restart: unless-stopped
 
   scheduler:
     container_name: hawler-forecast-backend-scheduler-${APP_ENV}

@@ -69,7 +69,7 @@ return [
 
     'prefix' => env(
         'HORIZON_PREFIX',
-        Str::slug(env('APP_NAME', 'laravel'), '_').'_horizon:'
+        Str::slug(env('APP_NAME', 'laravel'), '_') . '_horizon:'
     ),
 
     /*
@@ -83,7 +83,12 @@ return [
     |
     */
 
-    'middleware' => ['web'],
+    'basic_auth' => [
+        'username' => env('HORIZON_USERNAME', 'admin'),
+        'password' => env('HORIZON_PASSWORD', 'password'),
+    ],
+
+    'middleware' => ['horizon_basic_auth'],
 
     /*
     |--------------------------------------------------------------------------
@@ -213,17 +218,32 @@ return [
     ],
 
     'environments' => [
-        'production' => [
+        'prod' => [
             'supervisor-1' => [
-                'maxProcesses' => 10,
+                'maxProcesses' => 5,
                 'balanceMaxShift' => 1,
                 'balanceCooldown' => 3,
             ],
         ],
-
+        'staging' => [
+            'supervisor-1' => [
+                'maxProcesses' => 5,
+                'balanceMaxShift' => 1,
+                'balanceCooldown' => 3,
+            ],
+        ],
+        'dev' => [
+            'supervisor-1' => [
+                'maxProcesses' => 5,
+                'balanceMaxShift' => 1,
+                'balanceCooldown' => 3,
+            ],
+        ],
         'local' => [
             'supervisor-1' => [
-                'maxProcesses' => 3,
+                'maxProcesses' => 5,
+                'balanceMaxShift' => 1,
+                'balanceCooldown' => 3,
             ],
         ],
     ],
