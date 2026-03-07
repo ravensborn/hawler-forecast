@@ -41,7 +41,7 @@ class FetchTelemetryData implements ShouldQueue
                         continue;
                     }
 
-                    Telemetry::create([
+                    Telemetry::query()->create([
                         'sensor_device_id' => $device->id,
                         'sensor_parameter_id' => $parameter->id,
                         'value' => $reading['Value'],

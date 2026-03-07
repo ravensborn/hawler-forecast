@@ -25,8 +25,6 @@ class TeknykarIotService
             'endpointIds' => implode(',', $endpointIds),
         ]);
 
-        logger()->info($response->json());
-
         if ($response->failed()) {
             return [];
         }
