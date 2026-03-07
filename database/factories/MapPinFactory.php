@@ -46,8 +46,8 @@ class MapPinFactory extends Factory
         return $this->state(fn () => [
             'icon' => 'alert-triangle',
             'type' => MapPinType::Alert,
+            'severity' => $this->faker->randomElement(Severity::cases()),
             'data' => [
-                'severity' => $this->faker->randomElement(Severity::cases()),
                 'message' => [
                     'en' => $this->faker->sentence(),
                     'ar' => $this->faker->sentence(),
@@ -63,6 +63,7 @@ class MapPinFactory extends Factory
         return $this->state(fn () => [
             'icon' => 'incident',
             'type' => MapPinType::Incident,
+            'severity' => $this->faker->randomElement(Severity::cases()),
             'data' => [
                 'message' => [
                     'en' => $this->faker->sentence(),

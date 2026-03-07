@@ -31,10 +31,14 @@ class MapPinResource extends JsonResource
     {
         $data = $this->data ?? [];
 
+        if (in_array($this->type, [MapPinType::Alert, MapPinType::Incident])) {
+            $data['severity'] = $this->severity;
+        }
+
         if ($this->type === MapPinType::WeatherStation && $this->relationLoaded('sensorDeviceGroup') && $this->sensorDeviceGroup) {
             $data['sensorDeviceGroup'] = (new SensorDeviceGroupResource($this->sensorDeviceGroup))->resolve();
         }
 
-        return $data;
+        return empty($data) ? null : $data;
     }
 }

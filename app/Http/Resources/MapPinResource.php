@@ -33,6 +33,10 @@ class MapPinResource extends JsonResource
     {
         $data = $this->data ?? [];
 
+        if (in_array($this->type, [MapPinType::Alert, MapPinType::Incident])) {
+            $data['severity'] = $this->severity;
+        }
+
         if (isset($data['message']) && is_array($data['message'])) {
             $locale = app()->getLocale();
             $data['message'] = $data['message'][$locale] ?? $data['message'][config('app.fallback_locale')] ?? null;

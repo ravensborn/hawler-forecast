@@ -10,6 +10,9 @@ uses(RefreshDatabase::class);
 it('requires authentication', function () {
     $this->getJson(route('dashboard.map-pins.index'))
         ->assertUnauthorized();
+
+    $this->postJson(route('dashboard.map-pins.store'))
+        ->assertUnauthorized();
 });
 
 it('returns an empty list when no map pins exist', function () {
@@ -75,7 +78,7 @@ it('excludes expired pins from results', function () {
 
 it('returns all language translations in message data', function () {
     MapPin::factory()->alert()->create([
-        'data' => ['severity' => 'high', 'message' => ['en' => 'High temperature', 'ar' => 'درجة حرارة عالية', 'ku' => 'گەرمای بەرز']],
+        'data' => ['message' => ['en' => 'High temperature', 'ar' => 'درجة حرارة عالية', 'ku' => 'گەرمای بەرز']],
     ]);
 
     $pin = $this->actingAs(User::factory()->create())
@@ -85,4 +88,90 @@ it('returns all language translations in message data', function () {
 
     expect($pin['data']['message'])->toBeArray()
         ->toHaveKeys(['en', 'ar', 'ku']);
+});
+
+it('creates a map pin with alert type', function () {
+    $this->actingAs(User::factory()->create())
+        ->postJson(route('dashboard.map-pins.store'), [
+            'icon' => 'warning',
+            'latitude' => 36.1994,
+            'longitude' => 44.0220,
+            'type' => 'alert',
+            'severity' => 'high',
+            'data' => [
+                'message' => [
+                    'en' => 'Flood warning in the area',
+                    'ar' => 'تحذير من فيضان في المنطقة',
+                    'ku' => 'ئاگاداری لافاو لە ناوچەکە',
+                ],
+            ],
+            'expires_at' => now()->addDays(3)->toISOString(),
+        ])
+        ->assertSuccessful()
+        ->assertJsonPath('type', 'alert')
+        ->assertJsonPath('data.severity', 'high')
+        ->assertJsonPath('data.message.en', 'Flood warning in the area');
+
+    expect(MapPin::count())->toBe(1);
+});
+
+it('creates a map pin with incident type', function () {
+    $this->actingAs(User::factory()->create())
+        ->postJson(route('dashboard.map-pins.store'), [
+            'icon' => 'fire',
+            'latitude' => 36.15,
+            'longitude' => 44.01,
+            'type' => 'incident',
+            'severity' => 'medium',
+            'data' => [
+                'message' => [
+                    'en' => 'Fire reported',
+                    'ar' => 'تم الإبلاغ عن حريق',
+                    'ku' => 'ئاگر ڕاپۆرت کراوە',
+                ],
+            ],
+            'expires_at' => null,
+        ])
+        ->assertSuccessful()
+        ->assertJsonPath('type', 'incident')
+        ->assertJsonPath('data.severity', 'medium');
+});
+
+it('rejects weather-station type', function () {
+    $this->actingAs(User::factory()->create())
+        ->postJson(route('dashboard.map-pins.store'), [
+            'icon' => 'station',
+            'latitude' => 36.15,
+            'longitude' => 44.01,
+            'type' => 'weather-station',
+            'severity' => 'low',
+            'data' => [
+                'message' => ['en' => 'test', 'ar' => 'test', 'ku' => 'test'],
+            ],
+        ])
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors('type');
+});
+
+it('requires all three languages in message', function () {
+    $this->actingAs(User::factory()->create())
+        ->postJson(route('dashboard.map-pins.store'), [
+            'icon' => 'warning',
+            'latitude' => 36.15,
+            'longitude' => 44.01,
+            'type' => 'alert',
+            'severity' => 'high',
+            'data' => [
+                'message' => ['en' => 'English only'],
+            ],
+        ])
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors(['data.message.ar', 'data.message.ku']);
+});
+
+it('requires all fields', function () {
+    $this->actingAs(User::factory()->create())
+        ->postJson(route('dashboard.map-pins.store'), [])
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors(['icon', 'latitude', 'longitude', 'type', 'severity', 'data']);
 });

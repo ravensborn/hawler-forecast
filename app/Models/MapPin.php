@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\MapPinType;
+use App\Enums\Severity;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,6 +19,7 @@ class MapPin extends Model
         'latitude',
         'longitude',
         'type',
+        'severity',
         'data',
         'sensor_device_group_id',
         'expires_at',
@@ -27,6 +29,7 @@ class MapPin extends Model
     {
         return [
             'type' => MapPinType::class,
+            'severity' => Severity::class,
             'data' => 'array',
             'latitude' => 'decimal:7',
             'longitude' => 'decimal:7',

@@ -27,6 +27,7 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
         Route::get('alerts', [DashboardAlertController::class, 'index'])->name('alerts.index');
         Route::post('alerts', [DashboardAlertController::class, 'store'])->name('alerts.store');
         Route::get('map-pins', [DashboardMapPinController::class, 'index'])->name('map-pins.index');
+        Route::post('map-pins', [DashboardMapPinController::class, 'store'])->name('map-pins.store');
         Route::get('sensor-device-groups', [DashboardSensorDeviceGroupController::class, 'index'])->name('sensor-device-groups.index');
     });
 

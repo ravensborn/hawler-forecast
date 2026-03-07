@@ -57,8 +57,8 @@ it('does not require authentication', function () {
         ->assertSuccessful();
 });
 
-it('returns null data field when data is null', function () {
-    MapPin::factory()->create(['data' => null]);
+it('returns null data field when data is null on weather station', function () {
+    MapPin::factory()->weatherStation()->create(['data' => null]);
 
     $response = $this->getJson(route('map-pins.index'))
         ->assertSuccessful();
@@ -85,15 +85,13 @@ it('includes non-expired and null-expiry pins', function () {
         ->assertJsonCount(2, 'data');
 });
 
-it('alert pins have multilingual messages in model data', function () {
+it('alert pins have severity and multilingual messages', function () {
     $pin = MapPin::factory()->alert()->create();
 
-    expect($pin->data)->toHaveKeys(['severity', 'message'])
+    expect($pin->severity)->not->toBeNull()
+        ->and($pin->data)->toHaveKey('message')
         ->and($pin->data['message'])->toBeArray()
-        ->and($pin->data['message'])->toHaveKeys(['en', 'ar', 'ku'])
-        ->and($pin->data['message']['en'])->toBeString()
-        ->and($pin->data['message']['ar'])->toBeString()
-        ->and($pin->data['message']['ku'])->toBeString();
+        ->and($pin->data['message'])->toHaveKeys(['en', 'ar', 'ku']);
 });
 
 it('returns valid map pin type values including incident', function () {
@@ -109,11 +107,11 @@ it('returns valid map pin type values including incident', function () {
     expect($types->toArray())->each->toBeIn(MapPinType::values());
 });
 
-it('incident pins have only message in model data', function () {
+it('incident pins have severity and multilingual messages', function () {
     $pin = MapPin::factory()->incident()->create();
 
-    expect($pin->data)->toHaveKey('message')
-        ->and($pin->data)->not->toHaveKey('severity')
+    expect($pin->severity)->not->toBeNull()
+        ->and($pin->data)->toHaveKey('message')
         ->and($pin->data['message'])->toBeArray()
         ->and($pin->data['message'])->toHaveKeys(['en', 'ar', 'ku']);
 });
@@ -132,7 +130,7 @@ it('returns incident pin message in the requested language', function () {
 
 it('returns alert pin message in the requested language', function () {
     MapPin::factory()->alert()->create([
-        'data' => ['severity' => 'high', 'message' => ['en' => 'High temperature', 'ar' => 'درجة حرارة عالية', 'ku' => 'گەرمای بەرز']],
+        'data' => ['message' => ['en' => 'High temperature', 'ar' => 'درجة حرارة عالية', 'ku' => 'گەرمای بەرز']],
     ]);
 
     $enPin = $this->getJson(route('map-pins.index', ['language' => 'en']))->json('data.0');

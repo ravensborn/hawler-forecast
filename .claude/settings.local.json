@@ -27,7 +27,8 @@
       "Bash(php artisan tinker:*)",
       "Bash(php artisan make:middleware:*)",
       "Bash(php artisan:*)",
-      "Bash(composer require:*)"
+      "Bash(composer require:*)",
+      "Bash(php:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
