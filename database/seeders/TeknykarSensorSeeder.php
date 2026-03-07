@@ -125,55 +125,37 @@ class TeknykarSensorSeeder extends Seeder
             $firstGroup = null;
 
             foreach ($station['groups'] as $groupData) {
-                // platform_device_id is the stable unique key per station+group combination
-                $platformDeviceId = $station['name']['en'].' | '.$groupData['name']['en'];
+                $group = SensorDeviceGroup::create(['name' => $station['name']]);
+                $sensor = Sensor::create(['name' => $station['name']['en'].' - '.$groupData['name']['en']]);
 
-                $existingDevice = SensorDevice::query()
-                    ->where('platform_device_id', $platformDeviceId)
-                    ->first();
-
-                if ($existingDevice) {
-                    $group = $existingDevice->sensorDeviceGroup;
-                    $sensor = $existingDevice->sensor;
-                } else {
-                    $group = SensorDeviceGroup::query()->create(['name' => $groupData['name']]);
-                    $sensor = Sensor::query()->create(['name' => $platformDeviceId]);
-
-                    SensorDevice::query()->create([
-                        'name'                   => $station['name'],
-                        'sensor_id'              => $sensor->id,
-                        'sensor_device_group_id' => $group->id,
-                        'platform_device_id'     => $platformDeviceId,
+                foreach ($groupData['parameters'] as $parameter) {
+                    SensorParameter::create([
+                        'sensor_id'             => $sensor->id,
+                        'name'                  => $parameter['name'],
+                        'unit'                  => $parameter['unit'],
+                        'icon'                  => $parameter['icon'],
+                        'platform_parameter_id' => $parameter['endpointId'],
                     ]);
                 }
 
-                foreach ($groupData['parameters'] as $parameter) {
-                    SensorParameter::query()->firstOrCreate(
-                        ['platform_parameter_id' => $parameter['endpointId']],
-                        [
-                            'sensor_id' => $sensor->id,
-                            'name'      => $parameter['name'],
-                            'unit'      => $parameter['unit'],
-                            'icon'      => $parameter['icon'],
-                        ],
-                    );
-                }
+                SensorDevice::create([
+                    'name'                   => $groupData['name'],
+                    'sensor_id'              => $sensor->id,
+                    'sensor_device_group_id' => $group->id,
+                    'platform_device_id'     => $sensor->id,
+                ]);
 
                 $firstGroup ??= $group;
             }
 
-            MapPin::query()->firstOrCreate(
-                [
-                    'sensor_device_group_id' => $firstGroup->id,
-                    'type'                   => MapPinType::WeatherStation,
-                ],
-                [
-                    'icon'      => 'weather-station',
-                    'latitude'  => $station['latitude'],
-                    'longitude' => $station['longitude'],
-                    'data'      => ['stationName' => $station['name']],
-                ],
-            );
+            MapPin::create([
+                'icon'                   => 'weather-station',
+                'type'                   => MapPinType::WeatherStation,
+                'latitude'               => $station['latitude'],
+                'longitude'              => $station['longitude'],
+                'sensor_device_group_id' => $firstGroup->id,
+                'data'                   => ['stationName' => $station['name']],
+            ]);
         }
     }
 }
