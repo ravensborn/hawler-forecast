@@ -23,7 +23,7 @@ class StoreIncidentRequest extends FormRequest
     {
         return [
             'description' => ['required', 'string'],
-            'phoneNumber' => ['required', 'string'],
+            'phoneNumber' => ['required', 'string', 'starts_with:07', 'size:11'],
             'identifier' => ['required', 'string'],
             'incidentTypeId' => ['required', 'integer', 'exists:incident_types,id'],
             'latitude' => ['required', 'numeric', 'between:-90,90'],
