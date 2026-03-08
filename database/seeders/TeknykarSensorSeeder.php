@@ -58,16 +58,6 @@ class TeknykarSensorSeeder extends Seeder
                         ['name' => 'PM100', 'unit' => SensorParameterUnit::MilligramsPerCubicMeter, 'icon' => 'gauge', 'platform_parameter_id' => 123134],
                     ],
                 ],
-                [
-                    'sensorDeviceName' => [
-                        'en' => 'Rain Meter',
-                        'ku' => 'رێژەی باران',
-                        'ar' => 'مقياس المطر',
-                    ],
-                    'sensorParameters' => [
-                        ['name' => 'Total', 'unit' => SensorParameterUnit::Celsius, 'icon' => 'thermometer', 'platform_parameter_id' => 0],
-                    ],
-                ],
             ],
         ],
         [
@@ -128,6 +118,55 @@ class TeknykarSensorSeeder extends Seeder
                         ['name' => 'CH4', 'unit' => SensorParameterUnit::PartsPerMillion, 'icon' => 'cloud', 'platform_parameter_id' => 123162],
                         ['name' => 'CO2', 'unit' => SensorParameterUnit::PartsPerMillion, 'icon' => 'cloud', 'platform_parameter_id' => 123163],
                         ['name' => 'PM100', 'unit' => SensorParameterUnit::MilligramsPerCubicMeter, 'icon' => 'gauge', 'platform_parameter_id' => 123164],
+                    ],
+                ],
+            ],
+        ],
+        [
+            'sensorDeviceGroupName' => [
+                'en' => 'Extras',
+                'ku' => 'Extras',
+                'ar' => 'Extras',
+            ],
+            'latitude' => 36.15685769216389,
+            'longitude' => 44.01836803986594,
+            'sensorDevices' => [
+                [
+                    'sensorDeviceName' => [
+                        'en' => 'Rain Meter Station Kalak',
+                        'ku' => 'وێستگەی رێژەی باران - کەلەک',
+                        'ar' => 'محطة قياس المطر - کەلەک',
+                    ],
+                    'sensorParameters' => [
+                        ['name' => 'Temperature', 'unit' => SensorParameterUnit::Celsius, 'icon' => 'thermometer', 'platform_parameter_id' => 123079],
+                        ['name' => 'Rain Value', 'unit' => SensorParameterUnit::Millimeters, 'icon' => 'cloud-rain', 'platform_parameter_id' => 123088],
+                        ['name' => 'Humidity', 'unit' => SensorParameterUnit::RelativeHumidity, 'icon' => 'droplet', 'platform_parameter_id' => 123080],
+                        ['name' => 'Pressure', 'unit' => SensorParameterUnit::Hectopascal, 'icon' => 'gauge', 'platform_parameter_id' => 123081],
+                        ['name' => 'Motion / Vibration Level', 'unit' => SensorParameterUnit::GravitationalAcceleration, 'icon' => 'activity', 'platform_parameter_id' => 123082],
+                        ['name' => 'Tilt / Orientation', 'unit' => SensorParameterUnit::Degrees, 'icon' => 'compass', 'platform_parameter_id' => 123083],
+                        ['name' => 'Motion State', 'unit' => SensorParameterUnit::NoUnit, 'icon' => 'activity', 'platform_parameter_id' => 123084],
+                        ['name' => 'Acceleration X Axis', 'unit' => SensorParameterUnit::GravitationalAcceleration, 'icon' => 'activity', 'platform_parameter_id' => 123085],
+                        ['name' => 'Acceleration Y Axis', 'unit' => SensorParameterUnit::GravitationalAcceleration, 'icon' => 'activity', 'platform_parameter_id' => 123086],
+                        ['name' => 'Acceleration Z Axis', 'unit' => SensorParameterUnit::GravitationalAcceleration, 'icon' => 'activity', 'platform_parameter_id' => 123087],
+                    ],
+                ],
+                [
+                    'sensorDeviceName' => [
+                        'en' => 'Distance Measure - Radar',
+                        'ku' => 'پێوەری ئاست - ڕادار',
+                        'ar' => 'مقياس مستوى - رادار',
+                    ],
+                    'sensorParameters' => [
+                        ['name' => 'Temperature', 'unit' => SensorParameterUnit::Celsius, 'icon' => 'thermometer', 'platform_parameter_id' => 123048],
+                        ['name' => 'Distance', 'unit' => SensorParameterUnit::Meters, 'icon' => 'ruler', 'platform_parameter_id' => 123057],
+                        ['name' => 'Humidity', 'unit' => SensorParameterUnit::RelativeHumidity, 'icon' => 'droplet', 'platform_parameter_id' => 123049],
+                        ['name' => 'Pressure', 'unit' => SensorParameterUnit::Hectopascal, 'icon' => 'gauge', 'platform_parameter_id' => 123050],
+                        ['name' => 'Motion / Vibration Level', 'unit' => SensorParameterUnit::GravitationalAcceleration, 'icon' => 'activity', 'platform_parameter_id' => 123051],
+                        ['name' => 'Tilt / Orientation', 'unit' => SensorParameterUnit::Degrees, 'icon' => 'compass', 'platform_parameter_id' => 123052],
+                        ['name' => 'Motion State', 'unit' => SensorParameterUnit::NoUnit, 'icon' => 'activity', 'platform_parameter_id' => 123053],
+                        ['name' => 'Acceleration X Axis', 'unit' => SensorParameterUnit::GravitationalAcceleration, 'icon' => 'activity', 'platform_parameter_id' => 123054],
+                        ['name' => 'Acceleration Y Axis', 'unit' => SensorParameterUnit::GravitationalAcceleration, 'icon' => 'activity', 'platform_parameter_id' => 123055],
+                        ['name' => 'Acceleration Z Axis', 'unit' => SensorParameterUnit::GravitationalAcceleration, 'icon' => 'activity', 'platform_parameter_id' => 123056],
                     ],
                 ],
             ],

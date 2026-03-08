@@ -12,6 +12,11 @@ enum SensorParameterUnit: string
     case MicrogramsPerCubicMeter = 'µg/m³';
     case MilligramsPerCubicMeter = 'mg/m³';
     case Millimeters = 'mm';
+    case Hectopascal = 'hPa';
+    case GravitationalAcceleration = 'g';
+    case Degrees = '°';
+    case Meters = 'm';
+    case NoUnit = '-';
 
     public static function values(): array
     {
