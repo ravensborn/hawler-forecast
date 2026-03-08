@@ -128,8 +128,8 @@ class TeknykarSensorSeeder extends Seeder
                 'ku' => 'Extras',
                 'ar' => 'Extras',
             ],
-            'latitude' => 36.15685769216389,
-            'longitude' => 44.01836803986594,
+            'latitude' => 36.175550298249675,
+            'longitude' => 44.159721069071985,
             'sensorDevices' => [
                 [
                     'sensorDeviceName' => [
