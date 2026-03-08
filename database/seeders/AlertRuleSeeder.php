@@ -23,7 +23,7 @@ class AlertRuleSeeder extends Seeder
         [
             'name' => 'High Temperature',
             'operator' => AlertRuleOperator::GreaterThan,
-            'threshold' => 1.0,
+            'threshold' => 45.0,
             'cooldownHours' => 6,
             'shouldNotify' => true,
             'platformParameterIds' => [123151, 123143, 123135],
